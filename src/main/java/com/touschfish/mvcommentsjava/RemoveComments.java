@@ -23,9 +23,10 @@ public class RemoveComments {
         try (Stream<Path> paths = Files.walk(Paths.get(codePath))) {
             paths.filter(Files::isRegularFile).forEach(file -> {
                 try {
-                    String content = String.join("\n", Files.readAllLines(file));
+                    String content = String.join("\n", Files.readAllLines(file, StandardCharsets.UTF_8));
                     writeStringToFile(file.toFile(), doAction(content), StandardCharsets.UTF_8);
                 } catch (Exception e) {
+                    System.out.println("error in " + file.getFileName());
                     e.printStackTrace();
                 }
             });
