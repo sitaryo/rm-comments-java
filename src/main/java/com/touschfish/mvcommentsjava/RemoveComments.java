@@ -22,11 +22,16 @@ public class RemoveComments {
         }
         try (Stream<Path> paths = Files.walk(Paths.get(codePath))) {
             paths.filter(Files::isRegularFile).forEach(file -> {
+                var fileName = file.getFileName();
                 try {
-                    String content = String.join("\n", Files.readAllLines(file, StandardCharsets.UTF_8));
-                    writeStringToFile(file.toFile(), doAction(content), StandardCharsets.UTF_8);
+                    if (fileName.endsWith(".java")) {
+                        String content = String.join("\n", Files.readAllLines(file, StandardCharsets.UTF_8));
+                        writeStringToFile(file.toFile(), doAction(content), StandardCharsets.UTF_8);
+                    } else {
+                        System.out.println("skip file " + fileName);
+                    }
                 } catch (Exception e) {
-                    System.out.println("error in " + file.getFileName());
+                    System.out.println("error in " + fileName);
                     e.printStackTrace();
                 }
             });
