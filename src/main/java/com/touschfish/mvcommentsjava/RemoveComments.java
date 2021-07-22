@@ -14,7 +14,7 @@ import static org.apache.commons.io.FileUtils.writeStringToFile;
 
 public class RemoveComments {
 
-    public static String codePath = "path to your code dir";
+    public static String codePath = "/Users/licky/IdeaProjects/conepoke-server";
 
     public static void main(String[] args) {
         if (args != null && args.length == 1) {
@@ -22,11 +22,12 @@ public class RemoveComments {
         }
         try (Stream<Path> paths = Files.walk(Paths.get(codePath))) {
             paths.filter(Files::isRegularFile).forEach(file -> {
-                var fileName = file.getFileName();
+                var fileName = file.getFileName().toString();
                 try {
                     if (fileName.endsWith(".java")) {
                         String content = String.join("\n", Files.readAllLines(file, StandardCharsets.UTF_8));
                         writeStringToFile(file.toFile(), doAction(content), StandardCharsets.UTF_8);
+                        System.out.println("done file " + fileName);
                     } else {
                         System.out.println("skip file " + fileName);
                     }
